@@ -1,114 +1,60 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Playable Ads Portfolio — Kseniya Stoichykava</title>
-  <meta name="description" content="Interactive portfolio of HTML5 playable ads: PixiJS, Spine, vanilla JS.">
-  <meta property="og:title" content="Playable Ads Portfolio — Kseniya Stoichykava">
-  <meta property="og:description" content="5 interactive HTML5 playable ads — play them right in the browser.">
-  <meta property="og:image" content="/assets/og.png">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#0b0b14">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playable ads — примеры</title>
+  <meta property="og:title" content="Playable ads — примеры">
+  <meta property="og:image" content="assets/og.png">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css">
-  <script src="/assets/games.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #111116; color: #ececf1; font-family: Manrope, system-ui, sans-serif; line-height: 1.5; }
+    main { max-width: 1100px; margin: 0 auto; padding: 48px 20px 64px; }
+    h1 { font-size: 26px; font-weight: 700; }
+    .sub { color: #8d8d9c; margin-top: 6px; font-size: 15px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 24px 18px; margin-top: 32px; }
+    .card { color: inherit; text-decoration: none; display: block; }
+    .cover { aspect-ratio: 390 / 640; border-radius: 14px; overflow: hidden; background: #1c1c24; border: 1px solid #26262f; transition: transform .2s, border-color .2s; }
+    .cover img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .card:hover .cover { transform: translateY(-3px); border-color: #4a4a5a; }
+    .name { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-top: 12px; font-weight: 700; font-size: 16px; }
+    .name span { color: #8d8d9c; font-size: 13px; font-weight: 600; }
+    .card:hover .name span { color: #ececf1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .tags span { font-size: 12px; padding: 2px 8px; border-radius: 6px; background: #1f1f28; color: #b4b4c2; }
+    @media (max-width: 480px) {
+      main { padding-top: 32px; }
+      .grid { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
+    }
+  </style>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="/">
-      <span class="brand-dot"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg></span>
-      <span id="author"></span>
-    </a>
-    <div class="lang" role="group" aria-label="Language">
-      <button data-lang="en">EN</button><button data-lang="ru">RU</button>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div class="eyebrow" id="role"></div>
-      <h1 id="headline"></h1>
-      <p id="intro"></p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" id="startBtn" href="#">
-          <svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg><span></span>
-        </a>
-        <a class="btn btn-ghost" href="#games" id="seeAll"></a>
-      </div>
-    </section>
-
-    <section class="section" id="games">
-      <div class="section-head">
-        <h2 id="gamesTitle"></h2>
-        <span id="gamesCount"></span>
-      </div>
-      <div class="grid" id="grid"></div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <span id="copy"></span>
-    <div class="contacts" id="contacts"></div>
-  </footer>
+<main>
+  <h1>Playable ads</h1>
+  <p class="sub">Несколько моих демо. Нажмите на игру, чтобы открыть её.</p>
+  <div class="grid" id="grid"></div>
+</main>
 
 <script>
-(function () {
-  const P = window.PORTFOLIO, t = pfT;
-  const L = {
-    headline: { en: 'Playable ads<br>you can <span>play</span> right here', ru: 'Playable-реклама,<br>в которую можно <span>играть</span>' },
-    start: { en: "Start playing", ru: "Начать играть" },
-    seeAll: { en: "All games", ru: "Все игры" },
-    games: { en: "Games", ru: "Игры" },
-    count: { en: (n) => n + " interactive demos", ru: (n) => n + " интерактивных демо" },
-  };
-  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  // Список игр: папка в games/, название, технологии
+  const GAMES = [
+    { slug: "tropicana",    title: "Tropicana",         stack: ["PixiJS 8", "Spine", "@pixi/sound", "Vite"] },
+    { slug: "tower-rush",   title: "Tower Rush",        stack: ["PixiJS 8", "Spine", "GSAP", "Howler", "Vite"] },
+    { slug: "goose-bang",   title: "Goose Bang",        stack: ["PixiJS 8", "Spine", "Howler", "Vite"] },
+    { slug: "crime-empire", title: "Crime Empire",      stack: ["JavaScript", "HTML / CSS"] },
+    { slug: "balloon",      title: "Balloon Explosion", stack: ["JavaScript", "HTML / CSS"] },
+  ];
 
-  function render() {
-    const lang = pfLang();
-    document.querySelectorAll(".lang button").forEach((b) => b.classList.toggle("on", b.dataset.lang === lang));
-    document.getElementById("author").textContent = P.author;
-    document.getElementById("role").textContent = t(P.role);
-    document.getElementById("headline").innerHTML = t(L.headline);
-    document.getElementById("intro").textContent = t(P.intro);
-    const start = document.getElementById("startBtn");
-    start.href = "/play#" + P.games[0].slug;
-    start.querySelector("span").textContent = t(L.start);
-    document.getElementById("seeAll").textContent = t(L.seeAll);
-    document.getElementById("gamesTitle").textContent = t(L.games);
-    document.getElementById("gamesCount").textContent = L.count[lang](P.games.length);
-
-    document.getElementById("grid").innerHTML = P.games.map((g, i) => `
-      <a class="card" href="/play#${g.slug}">
-        <div class="card-cover">
-          <img src="/assets/covers/${g.slug}.webp" alt="${esc(g.title)}" loading="lazy">
-          <span class="card-play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg></span>
-          <span class="card-num">${String(i + 1).padStart(2, "0")}</span>
-        </div>
-        <div>
-          <h3>${esc(g.title)}</h3>
-          <div class="card-meta">${esc(t(g.genre))}</div>
-        </div>
-        <div class="chips">${g.stack.map((s) => `<span class="chip">${esc(s)}</span>`).join("")}</div>
-      </a>`).join("");
-
-    const c = P.contacts, links = [];
-    if (c.email) links.push(`<a class="btn btn-ghost" href="mailto:${esc(c.email)}">Email</a>`);
-    if (c.telegram) links.push(`<a class="btn btn-ghost" href="${esc(c.telegram)}" target="_blank" rel="noopener">Telegram</a>`);
-    if (c.github) links.push(`<a class="btn btn-ghost" href="${esc(c.github)}" target="_blank" rel="noopener">GitHub</a>`);
-    if (c.linkedin) links.push(`<a class="btn btn-ghost" href="${esc(c.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>`);
-    document.getElementById("contacts").innerHTML = links.join("");
-    document.getElementById("copy").textContent = "© " + new Date().getFullYear() + " " + P.author;
-  }
-
-  document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => pfSetLang(b.dataset.lang)));
-  document.addEventListener("pf-lang", render);
-  render();
-})();
+  document.getElementById("grid").innerHTML = GAMES.map(g => `
+    <a class="card" href="games/${g.slug}/index.html" target="_blank" rel="noopener">
+      <div class="cover"><img src="assets/covers/${g.slug}.webp" alt="${g.title}" loading="lazy"></div>
+      <div class="name">${g.title}<span>Открыть ↗</span></div>
+      <div class="tags">${g.stack.map(s => `<span>${s}</span>`).join("")}</div>
+    </a>`).join("");
 </script>
 </body>
 </html>
