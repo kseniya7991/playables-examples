@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="referrer" content="no-referrer">
+		<meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" name="viewport">
+		<meta content="ie=edge" http-equiv="X-UA-Compatible">
+		<title>Balloon</title>
+		<link href="css/main.min.css" rel="stylesheet">
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="game">
+				<div class="field" id="field"></div>
+
+				<div class="result" id="result">
+					<div class="sum" id="resultSum"></div>
+				</div>
+
+				<footer class="game-footer">
+					<div class="stat-balance">Saldo:
+						<span>
+							<strong id="totalBalance">1000.00</strong>
+							FUN
+						</span>
+
+					</div>
+					<div class="stat-win" id="currentWin">
+						Você ganhou
+						<strong id="currentWinValue">5,00</strong>
+						FUN!
+					</div>
+					<div class="controls" id="betControls">
+						<div class="controls__col">
+							Aposta
+							<input class="bet-display" id="betDisplay" value="1.00 FUN" readonly>
+
+						</div>
+						<div class="bet-arrows">
+							<button class="arrow-btn" id="arrowUp">▲</button>
+							<button class="arrow-btn" id="arrowDown">▼</button>
+						</div>
+						<div class="bet-dropdown" id="betDropdown"></div>
+
+					</div>
+				</footer>
+			</div>
+			<div class="popup" id="popup">
+				<div class="popup__container">
+					<div class="popup__win">Você ganhou:
+						<span class="popup__sum">
+							<span id="totalWin">
+								0
+							</span>
+							R$
+						</span>
+					</div>
+					A demo acabou. Agora é hora de jogar com dinheiro de verdade.
+					<div class="popup__text">
+						😏 O app tá te esperando:
+						<a href="/" rel="noreferrer nofollow" class="popup__link">PLAY</a>
+					</div>
+					<div class="popup__bonus">Cadastre-se agora e ganhe um bônus exclusivo de 150% no seu primeiro depósito!</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/main.min.js"></script>
+</html>

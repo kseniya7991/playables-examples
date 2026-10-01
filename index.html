@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Playable Ads Portfolio — Kseniya Stoichykava</title>
+  <meta name="description" content="Interactive portfolio of HTML5 playable ads: PixiJS, Spine, vanilla JS.">
+  <meta property="og:title" content="Playable Ads Portfolio — Kseniya Stoichykava">
+  <meta property="og:description" content="5 interactive HTML5 playable ads — play them right in the browser.">
+  <meta property="og:image" content="/assets/og.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0b0b14">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/games.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">
+      <span class="brand-dot"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg></span>
+      <span id="author"></span>
+    </a>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en">EN</button><button data-lang="ru">RU</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow" id="role"></div>
+      <h1 id="headline"></h1>
+      <p id="intro"></p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" id="startBtn" href="#">
+          <svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg><span></span>
+        </a>
+        <a class="btn btn-ghost" href="#games" id="seeAll"></a>
+      </div>
+    </section>
+
+    <section class="section" id="games">
+      <div class="section-head">
+        <h2 id="gamesTitle"></h2>
+        <span id="gamesCount"></span>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span id="copy"></span>
+    <div class="contacts" id="contacts"></div>
+  </footer>
+
+<script>
+(function () {
+  const P = window.PORTFOLIO, t = pfT;
+  const L = {
+    headline: { en: 'Playable ads<br>you can <span>play</span> right here', ru: 'Playable-реклама,<br>в которую можно <span>играть</span>' },
+    start: { en: "Start playing", ru: "Начать играть" },
+    seeAll: { en: "All games", ru: "Все игры" },
+    games: { en: "Games", ru: "Игры" },
+    count: { en: (n) => n + " interactive demos", ru: (n) => n + " интерактивных демо" },
+  };
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function render() {
+    const lang = pfLang();
+    document.querySelectorAll(".lang button").forEach((b) => b.classList.toggle("on", b.dataset.lang === lang));
+    document.getElementById("author").textContent = P.author;
+    document.getElementById("role").textContent = t(P.role);
+    document.getElementById("headline").innerHTML = t(L.headline);
+    document.getElementById("intro").textContent = t(P.intro);
+    const start = document.getElementById("startBtn");
+    start.href = "/play#" + P.games[0].slug;
+    start.querySelector("span").textContent = t(L.start);
+    document.getElementById("seeAll").textContent = t(L.seeAll);
+    document.getElementById("gamesTitle").textContent = t(L.games);
+    document.getElementById("gamesCount").textContent = L.count[lang](P.games.length);
+
+    document.getElementById("grid").innerHTML = P.games.map((g, i) => `
+      <a class="card" href="/play#${g.slug}">
+        <div class="card-cover">
+          <img src="/assets/covers/${g.slug}.webp" alt="${esc(g.title)}" loading="lazy">
+          <span class="card-play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z"/></svg></span>
+          <span class="card-num">${String(i + 1).padStart(2, "0")}</span>
+        </div>
+        <div>
+          <h3>${esc(g.title)}</h3>
+          <div class="card-meta">${esc(t(g.genre))}</div>
+        </div>
+        <div class="chips">${g.stack.map((s) => `<span class="chip">${esc(s)}</span>`).join("")}</div>
+      </a>`).join("");
+
+    const c = P.contacts, links = [];
+    if (c.email) links.push(`<a class="btn btn-ghost" href="mailto:${esc(c.email)}">Email</a>`);
+    if (c.telegram) links.push(`<a class="btn btn-ghost" href="${esc(c.telegram)}" target="_blank" rel="noopener">Telegram</a>`);
+    if (c.github) links.push(`<a class="btn btn-ghost" href="${esc(c.github)}" target="_blank" rel="noopener">GitHub</a>`);
+    if (c.linkedin) links.push(`<a class="btn btn-ghost" href="${esc(c.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>`);
+    document.getElementById("contacts").innerHTML = links.join("");
+    document.getElementById("copy").textContent = "© " + new Date().getFullYear() + " " + P.author;
+  }
+
+  document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => pfSetLang(b.dataset.lang)));
+  document.addEventListener("pf-lang", render);
+  render();
+})();
+</script>
+</body>
+</html>
